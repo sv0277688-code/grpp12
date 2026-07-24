@@ -117,15 +117,13 @@ if os.path.exists(MODEL_PATH):
 # -----------------------------
 st.sidebar.header("🧠 Train Model")
 
-train_folder = st.sidebar.text_input(
-    "Enter training folder path",
-    value="train"
-)
+train_folder = ""
+test_folder = ""
 
-test_folder = st.sidebar.text_input(
-    "Enter testing folder path",
-    value="test"
-)
+if dataset_zip is not None:
+    train_folder = os.path.join(extract_path, "archive", "train")
+    test_folder = os.path.join(extract_path, "archive", "test")
+
 
 epochs = st.sidebar.slider(
     "Training epochs",
