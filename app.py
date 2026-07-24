@@ -120,9 +120,8 @@ st.sidebar.header("🧠 Train Model")
 train_folder = ""
 test_folder = ""
 
-if dataset_zip is not None:
-    train_folder = os.path.join(extract_path, "archive", "train")
-    test_folder = os.path.join(extract_path, "archive", "test")
+train_folder = st.session_state.get("train_folder", "")
+test_folder = st.session_state.get("test_folder", "")
 
 
 epochs = st.sidebar.slider(
@@ -134,7 +133,7 @@ epochs = st.sidebar.slider(
 
 if st.sidebar.button("🚀 Train Model"):
 
-    if not os.path.exists(train_folder):
+    if train_folder == "" or not os.path.exists(train_folder):
 
         st.error(
             "Training folder not found. "
