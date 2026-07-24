@@ -81,25 +81,25 @@ dataset_zip = st.sidebar.file_uploader(
 
 if dataset_zip is not None:
 
-    with tempfile.TemporaryDirectory() as temp_dir:
+    if "temp_dir" not in st.session_state:
+        st.session_state.temp_dir = tempfile.TemporaryDirectory()
 
-        zip_path = os.path.join(temp_dir, "dataset.zip")
+    temp_dir = st.session_state.temp_dir.name
 
-        with open(zip_path, "wb") as f:
-            f.write(dataset_zip.getbuffer())
+    zip_path = os.path.join(temp_dir, "dataset.zip")
 
-        extract_path = os.path.join(temp_dir, "dataset")
+    with open(zip_path, "wb") as f:
+        f.write(dataset_zip.getbuffer())
 
-        with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            zip_ref.extractall(extract_path)
+    extract_path = os.path.join(temp_dir, "dataset")
 
-        st.success("Dataset uploaded and extracted successfully!")
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(extract_path)
 
-        st.info(
-            "Your dataset should contain train and test folders "
-            "with emotion folders inside them."
-        )
+    st.session_state.train_folder = os.path.join(extract_path, "archive", "train")
+    st.session_state.test_folder = os.path.join(extract_path, "archive", "test")
 
+    st.success("Dataset uploaded and extracted successfully!")
 # -----------------------------
 # Load existing model
 # -----------------------------
